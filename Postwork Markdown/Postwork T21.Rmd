@@ -1,0 +1,268 @@
+---
+title: "Postwork T21"
+author: 'Equipo 21'
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(rmarkdown)
+library(tinytex)
+library(ggplot2)
+library(reshape2)
+```
+
+[Postwork 1](https://github.com/beduExpert/Programacion-con-R-Santander/tree/master/Sesion-01/Postwork)
+
+### Objetivo
+El Postwork tiene como objetivo que practiques los comandos básicos aprendidos durante la sesión, de tal modo que sirvan para reafirmar el conocimiento. Recuerda que la programación es como un deporte en el que se debe practicar, habrá caídas, pero lo importante es levantarse y seguir adelante. Éxito
+
+### Desarrollo
+
+El siguiente postwork, te servirá para ir desarrollando habilidades como si se tratara de un proyecto que evidencie el progreso del aprendizaje durante el módulo, sesión a sesión se irá desarrollando. A continuación aparecen una serie de objetivos que deberás cumplir, es un ejemplo real de aplicación y tiene que ver con datos referentes a equipos de la liga española de fútbol (recuerda que los datos provienen siempre de diversas naturalezas), en este caso se cuenta con muchos datos que se pueden aprovechar, explotarlos y generar análisis interesantes que se pueden aplicar a otras áreas. Siendo así damos paso a las instrucciones:
+
+Importa los datos de soccer de la temporada 2019/2020 de la primera división de la liga española a R, los datos los puedes encontrar en el siguiente [enlace:](https://www.football-data.co.uk/spainm.php)
+```{r}
+fut<-read.csv("https://www.football-data.co.uk/mmz4281/1920/SP1.csv")
+df<-data.frame(fut)
+head(df)
+```
+
+Del data frame que resulta de importar los datos a R, extrae las columnas que contienen los números de goles anotados por los equipos que jugaron en casa (FTHG) y los goles anotados por los equipos que jugaron como visitante (FTAG)
+```{r}
+df1<-as.data.frame(cbind(goleslocal=df$FTHG,golesvisita=df$FTAG))
+dflocal<-df1$goleslocal
+dfvisita<-df1$golesvisita
+```
+```{r}
+head(df1)
+```
+
+Consulta cómo funciona la función table en R al ejecutar en la consola ?table
+
+```{r}
+local<-table(dflocal)
+visita<-table(dfvisita)
+partidos<-table(df1)
+```
+```{r}
+print('Local')
+local
+```
+```{r}
+print('Visita')
+visita
+```
+```{r}
+print('Partidos')
+partidos
+```
+Posteriormente elabora tablas de frecuencias relativas para estimar las siguientes probabilidades:
+
+La probabilidad (marginal) de que el equipo que juega en casa anote x goles (x = 0, 1, 2, ...)
+```{r}
+hg<-prop.table(local)
+print('Probabilidad goles de local')
+hg
+```
+
+La probabilidad (marginal) de que el equipo que juega como visitante anote y goles (y = 0, 1, 2, ...)
+```{r}
+ag<-prop.table(visita)
+print('Probabilidad goles de visita')
+ag
+```
+
+La probabilidad (conjunta) de que el equipo que juega en casa anote x goles y el equipo que juega como visitante anote y goles (x = 0, 1, 2, ..., y = 0, 1, 2, ...)
+```{r}
+tg<-prop.table(partidos)
+print('Probabilidad conjunta')
+tg
+```
+
+[Postwork 2](https://github.com/beduExpert/Programacion-con-R-Santander/tree/master/Sesion-02/Postwork)
+
+### Objetivo
+* Importar múltiples archivos csv a R
+* Observar algunas características y manipular los data frames
+* Combinar múltiples data frames en un único data frame
+
+### Desarrollo
+Ahora vamos a generar un cúmulo de datos mayor al que se tenía, esta es una situación habitual que se puede presentar para complementar un análisis, siempre es importante estar revisando las características o tipos de datos que tenemos, por si es necesario realizar alguna transformación en las variables y poder hacer operaciones aritméticas si es el caso, además de sólo tener presente algunas de las variables, no siempre se requiere el uso de todas para ciertos procesamientos.
+
+Importa los datos de soccer de las temporadas 2017/2018, 2018/2019 y 2019/2020 de la primera división de la liga española a R, los datos los puedes encontrar en el siguiente [enlace:](https://www.football-data.co.uk/spainm.php)
+
+```{r}
+liga_19_20 <- "https://www.football-data.co.uk/mmz4281/1920/SP1.csv"
+liga_18_19 <- "https://www.football-data.co.uk/mmz4281/1819/SP1.csv"
+liga_17_18 <- "https://www.football-data.co.uk/mmz4281/1718/SP1.csv"
+```
+
+Cambiamos directorio de trabajo a directorio donde se encuentra el script.
+Creamos directorio para guardar los archivos CSV y lo usamos como directorio de trabajo, descargamos los datasets. 
+```{r , include=FALSE}
+wd = dirname(rstudioapi::getSourceEditorContext()$path)
+setwd(wd)
+```
+```{r, include=FALSE}
+download.file(url = liga_19_20, destfile = "liga_19-20.csv", mode = "wb")
+download.file(url = liga_18_19, destfile = "liga_18-19.csv", mode = "wb")
+download.file(url = liga_17_18, destfile = "liga_17-18.csv", mode = "wb")
+```
+Cargamos los datasets
+```{r}
+d<-c("liga_17-18.csv","liga_18-19.csv","liga_19-20.csv")
+datasets <- lapply(d, read.csv)
+```
+
+Obten una mejor idea de las características de los data frames al usar las funciones: str, head, View y summary
+```{r}
+summary(datasets)
+```
+Con la función select del paquete dplyr selecciona únicamente las columnas Date, HomeTeam, AwayTeam, FTHG, FTAG y FTR; esto para cada uno de los data frames. (Hint: también puedes usar lapply).
+```{r}
+datasets <- lapply(datasets, select, Date, HomeTeam, AwayTeam, FTHG, FTAG, FTR)
+```
+
+Asegúrate de que los elementos de las columnas correspondientes de los nuevos data frames sean del mismo tipo (Hint 1: usa as.Date y mutate para arreglar las fechas). Con ayuda de la función rbind forma un único data frame que contenga las seis columnas mencionadas en el punto 3 (Hint 2: la función do.call podría ser utilizada).
+```{r}
+# Transformamos las fechas al formato indicado.
+datasets <- lapply(datasets, mutate, Date = as.Date(Date, "%d/%m/%Y"))
+```
+```{r}
+# Unimos todos los dataframes en uno solo.
+dataset <- do.call(rbind, datasets)
+head(dataset)
+```
+```{r}
+print('Dimensión')
+dim(dataset)
+```
+
+[Postwork 3](https://github.com/beduExpert/Programacion-con-R-Santander/tree/master/Sesion-03/Postwork)
+
+### Objetivo
+* Realizar descarga de archivos desde internet
+* Generar nuevos data frames
+* Visualizar probabilidades estimadas con la ayuda de gráficas
+
+### Desarrollo
+Ahora graficaremos probabilidades (estimadas) marginales y conjuntas para el número de goles que anotan en un partido el equipo de casa o el equipo visitante.
+
+Con el último data frame obtenido en el postwork de la sesión 2, elabora tablas de frecuencias relativas para estimar las siguientes probabilidades:
+La probabilidad (marginal) de que el equipo que juega en casa anote x goles (x=0,1,2,)
+
+```{r}
+allocal<-table(dataset$FTHG)
+plocal<-prop.table(allocal)
+plocal<-as.data.frame(plocal)
+plocal
+```
+
+La probabilidad (marginal) de que el equipo que juega como visitante anote y goles (y=0,1,2,)
+
+```{r}
+allvisita<-table(dataset$FTAG)
+pvisita<-prop.table(allvisita)
+pvisita<-as.data.frame(pvisita)
+pvisita
+```
+
+La probabilidad (conjunta) de que el equipo que juega en casa anote x goles y el equipo que juega como visitante anote y goles (x=0,1,2,, y=0,1,2,)
+
+```{r}
+allmatch<-as.data.frame(cbind(Goles_Local =dataset$FTHG, Goles_Visita =dataset$FTAG))
+allmatch<-table(allmatch)
+pallmatch<-prop.table(allmatch)
+pallmatch<-as.data.frame(pallmatch)
+pallmatch
+```
+
+Renombramos las variables
+```{r}
+plocal<-rename(plocal, Goles = Var1, Probabilidad = Freq)
+pvisita<-rename(pvisita, Goles = Var1, Probabilidad = Freq)
+pallmatch<-rename(pallmatch, Probabilidad = Freq)
+```
+
+Realiza lo siguiente:
+Un gráfico de barras para las probabilidades marginales estimadas del número de goles que anota el equipo de casa
+```{r}
+ggplot(plocal, aes(x=Goles, y=Probabilidad)) +
+  geom_col(binwidth = 4, col="black", fill = "blue") +
+  ggtitle("Probabilidad de anotar en casa") +
+  theme_light()
+```
+
+Un gráfico de barras para las probabilidades marginales estimadas del número de goles que anota el equipo visitante.
+
+```{r}
+ggplot(pvisita, aes(x=Goles, y=Probabilidad)) +
+  geom_col(binwidth = 4, col="black", fill = "red") +
+  ggtitle("Probabilidad de anotar en visita") +
+  theme_light()
+```
+
+Un HeatMap para las probabilidades conjuntas estimadas de los números de goles que anotan el equipo de casa y el equipo visitante en un partido.
+
+```{r}
+ggplot(pallmatch, aes(x=Goles_Local, y=Goles_Visita, fill= Probabilidad)) +
+  geom_tile()
+
+```
+
+[Postwork 4](https://github.com/beduExpert/Programacion-con-R-Santander/tree/master/Sesion-04/Postwork)
+
+### Objetivo
+Investigar la dependencia o independecia de las variables aleatorias X y Y, el número de goles anotados por el equipo de casa y el número de goles anotados por el equipo visitante.
+
+### Desarrollo
+Ahora investigarás la dependencia o independencia del número de goles anotados por el equipo de casa y el número de goles anotados por el equipo visitante mediante un procedimiento denominado bootstrap, revisa bibliografía en internet para que tengas nociones de este desarrollo.
+
+Ya hemos estimado las probabilidades conjuntas de que el equipo de casa anote X=x goles (x=0,1,... ,8), y el equipo visitante anote Y=y goles (y=0,1,... ,6), en un partido. Obtén una tabla de cocientes al dividir estas probabilidades conjuntas por el producto de las probabilidades marginales correspondientes.
+
+```{r}
+pallmatch<-prop.table(allmatch)
+plocal<-prop.table(allocal)
+pvisita<-prop.table(allvisita)
+
+pallmatch/outer(plocal, pvisita, "*")
+
+```
+
+
+Mediante un procedimiento de boostrap, obtén más cocientes similares a los obtenidos en la tabla del punto anterior. Esto para tener una idea de las distribuciones de la cual vienen los cocientes en la tabla anterior. Menciona en cuáles casos le parece razonable suponer que los cocientes de la tabla en el punto 1, son iguales a 1 (en tal caso tendríamos independencia de las variables aleatorias X y Y).
+
+```{r}
+simul<-c()
+for (i in 1:1000){
+  set.seed(i+132)
+  sm <- sample(1:dim(dataset)[1], size = 760, replace = F)	
+  df<-dataset[sm,]
+  al<-table(df$FTHG) ; pl<-prop.table(al)
+  av<-table(df$FTAG) ; pv<-prop.table(av)
+  am<-as.data.frame(cbind(Goles_Local =df$FTHG, Goles_Visita =df$FTAG)); am<-table(am); pm<-prop.table(am)
+  simul[[i]]<-  pm/outer(pl, pv, "*")
+}
+```
+```{r}
+simul<-lapply(simul, as.data.frame)
+simul<-lapply(simul,rename, Cocientes = Freq)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
