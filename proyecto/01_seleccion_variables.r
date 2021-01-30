@@ -1,5 +1,6 @@
-df<-read.csv('/Users/DavidHC/Desktop/Dataframe NYC/listings 2.csv', encoding = 'utf-8')
+df<-read.csv('listings.csv', encoding = 'utf-8')
 head(df)
+
 # id, last_scraped, name, host_id, host_name, host_since, host_response_time, host_response_rate, host_acceptance_rate, host_is_superhost, host_total_listings_count
 # host_verifications, host_identity_verified, neighbourhood neighbourhood_cleansed neighbourhood_group_cleansed latitude longitude
 # property_type       room_type accommodates bathrooms bathrooms_text bedrooms beds,  amenities
