@@ -25,33 +25,49 @@ part_2 <- datos_airbinb_nyc %>% select(maximum_nights_avg_ntm,
                         review_scores_value,
                         license,
                         instant_bookable,
-                        calculated_host_listings_count,
-                        license,
-                        instant_bookable)
+                        calculated_host_listings_count)
 
 str(part_2)
 
-# Canversión de fechas a formato adecuado.
-part_2 <- part_2 %>% mutate(
-    calendar_last_scraped = as.Date(calendar_last_scraped, "%Y-%m-%d"),
-    first_review = as.Date(first_review, "%Y-%m-%d"),
-    last_review = as.Date(last_review, "%Y-%m-%d"),
+
+categoricas <- c(
+    "calendar_updated",
+    "has_availability",
+    "license",
+    "instant_bookable"
 )
 
-# Conversión a valores booleanos
-part_2$instant_bookable <- factor(
-    part_2$instant_bookable,
-    levels = c("t", "f"),
-    labels = c(1, 0)
+numericas <- c(
+    "maximum_nights_avg_ntm",
+    "availability_30",
+    "availability_60",
+    "availability_90",
+    "availability_365",
+    "number_of_reviews",
+    "number_of_reviews_ltm",
+    "number_of_reviews_l30d",
+    "review_scores_rating",
+    "review_scores_accuracy",
+    "review_scores_cleanliness",
+    "review_scores_checkin",
+    "review_scores_communication",
+    "review_scores_location",
+    "review_scores_value",
+    "calculated_host_listings_count",
 )
 
-part_2$has_availability <- factor(
-    part_2$has_availability,
-    levels = c("t", "f"),
-    labels = c(1, 0)
+fechas <- c(
+    "calendar_updated",
+    "first_review",
+    "last_review",
 )
 
-# Eliminación de columnas vacías
-part_2$calendar_updated <- NULL
-part_2$license <- NULL
-
+for (categorica in categoricas) {
+    colnames(part_2)[match(categorica, colnames(part_2))] <- paste("v_", categorica, sep = "")
+}
+for (numerica in numericas) {
+    colnames(part_2)[match(numerica, colnames(part_2))] <- paste("c_", numerica, sep = "")
+}
+for (fecha in fechas) {
+    colnames(part_2)[match(fecha, colnames(part_2))] <- paste("d_", fecha, sep = "")
+}
