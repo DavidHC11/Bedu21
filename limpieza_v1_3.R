@@ -173,6 +173,7 @@ completitud<-cbind(Variables=colnames(df), completitud)
 
 df<-select(df, -com)
 
+#Borrar filas que tuvieran NA 
 filas<-c()
 for (i in 1:nrow(df)) {
   if (sum(is.na(df[i,]))>0) {
@@ -213,4 +214,16 @@ c_3<-cbind(Variables = colnames(df), c_3)
 (com3<-c_3[c_3[,2]<.80,1])
 
 df<-select(df, -c("v_host_response_time", "c_host_response_rate", "c_host_acceptance_rate"))
+
+#Conformidad
+
+summary(df)
+
+
+
+
+
+
+
+
 
