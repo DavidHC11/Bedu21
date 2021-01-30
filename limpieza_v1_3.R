@@ -67,7 +67,6 @@ categoricas <- c(
   "bathrooms",
   "bedrooms",
   "beds",
-  "amenities",
   "host_response_time",
   "host_is_superhost",
   "host_identity_verified",
@@ -122,13 +121,16 @@ fechas <- c(
   "host_since",
   "calendar_updated",
   "first_review",
-  "last_review"
+  "last_review",
+  "calendar_last_scraped"
 )
 
 textos<-c(
   "host_name",
   "host_verifications",
-  "bathrooms_text"
+  "bathrooms_text",
+  "name",
+  "amenities"
   )
 
 
@@ -168,5 +170,7 @@ completitud[i]<-1-sum(is.na(df[,i]))/dim(df)[1]
 completitud<-as.data.frame(completitud)
 completitud<-cbind(Variables=colnames(df), completitud)
 (com<-completitud[completitud[,2]<.80,1])
+
+df<-select(df, -com)
 
 
