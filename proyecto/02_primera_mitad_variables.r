@@ -7,4 +7,3 @@ data1 <- data1 %>% mutate(last_scraped = as.Date(last_scraped, "%Y-%m-%d"), host
 data1 <- data1 %>% mutate(host_response_rate = gsub("\\%", "", host_response_rate), host_acceptance_rate = gsub("\\%", "", host_acceptance_rate), price = gsub("\\$", "", price))
 data1 <- data1 %>% mutate(host_response_rate = as.numeric(host_response_rate)/100, host_acceptance_rate = as.numeric(host_acceptance_rate)/100, price = as.numeric(price))
 data1 <- data1 %>% mutate(host_is_superhost = factor(host_is_superhost, levels=c('t', 'f'), labels=c(1, 0)), host_identity_verified = factor(host_identity_verified, levels=c('t', 'f'), labels=c(1, 0)))
-write.csv (data1, "variables1.csv")
