@@ -173,4 +173,44 @@ completitud<-cbind(Variables=colnames(df), completitud)
 
 df<-select(df, -com)
 
+filas<-c()
+for (i in 1:nrow(df)) {
+  if (sum(is.na(df[i,]))>0) {
+    filas<-c(i,filas)
+  }
+}
+
+df<-df[-filas,]
+
+#Completitud por ""
+
+c_2<-c()
+
+for(i in 1:length(colnames(df))){
+  
+  c_2[i]<-1-sum(df[,i]=="")/dim(df)[1]
+  
+}
+
+c_2<-as.data.frame(c_2)
+c_2<-cbind(Variables = colnames(df), c_2)
+(com2<-c_2[c_2[,2]<.80,1])
+
+df<-select(df, -c("v_neighbourhood" ,"d_first_review","d_last_review"))
+unique(df$v_host_response_time)
+
+#Completitud por "N/A"
+c_3<-c()
+
+for(i in 1:length(colnames(df))){
+  
+  c_3[i]<-1-(length(grep("N/A",df[,i],fixed = T))/dim(df)[1])
+  
+}
+
+c_3<-as.data.frame(c_3)
+c_3<-cbind(Variables = colnames(df), c_3)
+(com3<-c_3[c_3[,2]<.80,1])
+
+df<-select(df, -c("v_host_response_time", "c_host_response_rate", "c_host_acceptance_rate"))
 
