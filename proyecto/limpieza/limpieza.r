@@ -29,16 +29,15 @@ df <- eliminar_nulos(df)
 df <- eliminar_cadenas_no_validas(df)
 
 # ========= Conformidad ==========
+df <- conformidad_c(df)
 
 # Revisar con hist() o table()
 
 conformidad_t <- function(df) {
 
 }
-conformidad_v <- function(df) {
 
-}
-conformidad_d <- function(df) {
+conformidad_v <- function(df) {
 
 }
 
