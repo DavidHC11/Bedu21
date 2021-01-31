@@ -15,3 +15,9 @@ conformidad_c <- function(df) {
 
     return(df)
 }
+
+conformidad_v <- function(df) {
+  rare_props <- as.vector((as.data.frame(table(df$v_property_type)) %>% filter(Freq <= 10))$Var1)
+  df <- df %>% filter(!(v_property_type %in% rare_props))
+  return(df)
+}
