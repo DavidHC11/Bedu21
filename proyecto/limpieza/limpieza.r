@@ -9,6 +9,7 @@ source("./01_seleccion_variables.r")
 source("./02_etiquetado_variables.r")
 source("./03_eliminacion_duplicados.r")
 source("./04_completitud.r")
+source("./05_conformidad_integridad.r")
 
 # ** Cambiar directorio de trabajo a ubicación de CSV.
 
@@ -26,13 +27,15 @@ df <- eliminar_nulos(df)
 df <- eliminar_cadenas_no_validas(df)
 
 # ========= Conformidad ==========
+
+df <- conformidad_c(df)
+
 # Revisar con hist() o table()
-conformidad_c <- function(df) {
-   
-}
+
 conformidad_t <- function(df) {
-   
+
 }
+
 conformidad_v <- function(df) {
   rare_props <- as.vector((as.data.frame(table(df$v_property_type)) %>% filter(Freq <= 10))$Var1)
   df <- df %>% filter(!(v_property_type %in% rare_props))
@@ -41,3 +44,4 @@ conformidad_v <- function(df) {
 conformidad_d <- function(df) {
 
 }
+
