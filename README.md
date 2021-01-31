@@ -1,7 +1,7 @@
 # Bedu21
 Repositorio del Equipo 21 😎🏋️‍♂️
 
-El contenido de este repositorio es una compilación de prácticas relacionadas a estadística aplicada en lenguaje R como portafolio de evidencia del curso de Estadística en.
+El contenido de este repositorio es una compilación de prácticas relacionadas a estadística aplicada en lenguaje R como portafolio de evidencia del curso _Programación y estadística con R (Santander)_ de BEDU.
 
 Los temas incluyen:
 * Importación de datos
