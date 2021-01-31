@@ -15,5 +15,8 @@ eliminar_duplicados <- function(df) {
     # Eliminamos las entradas duplicadas en el data frame con id
     df <- df[-indexid, ]
 
+    # Filas duplicadas con d_last_scraped
+    df$d_calendar_last_scraped <- NULL
+
     return(df)
 }

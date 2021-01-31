@@ -14,3 +14,5 @@ data1 <- data1 %>% mutate(c_host_response_rate = as.numeric(c_host_response_rate
 data1 <- data1 %>% mutate(b_host_is_superhost = factor(b_host_is_superhost, levels=c('t', 'f'), labels=c(1, 0)), b_host_identity_verified = factor(b_host_identity_verified, levels=c('t', 'f'), labels=c(1, 0)))
 
 View(data1)
+
+lapply()
