@@ -1,4 +1,6 @@
 # ================== Dependencias globales ======================
+
+setwd("proyecto/limpieza")
 library(dplyr)
 library(tidyr)
 
