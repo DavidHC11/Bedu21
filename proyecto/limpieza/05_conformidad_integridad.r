@@ -18,8 +18,16 @@ conformidad_c <- function(df) {
 }
 
 conformidad_v <- function(df) {
-  rare_props <- as.vector((as.data.frame(table(df$v_property_type)) %>%
-    filter(Freq <= 10))$Var1)
-  df <- df %>% filter(!(v_property_type %in% rare_props))
+  # rare_props <- as.vector((as.data.frame(table(df$v_property_type)) %>%
+  #   filter(Freq <= 10))$Var1)
+  # df <- df %>% filter(!(v_property_type %in% rare_props))
+
+  df <- df %>% mutate(
+    v_host_is_superhost = factor(v_host_is_superhost, levels = c("t", "f"), labels = c(1, 0)),
+    v_host_identity_verified = factor(v_host_identity_verified, levels = c("t", "f"), labels = c(1, 0)),
+    v_has_availability = factor(v_has_availability, levels = c("t", "f"), labels = c(1, 0)),
+    v_instant_bookable = factor(v_instant_bookable, levels = c("t", "f"), labels = c(1, 0))
+  )
+
   return(df)
 }

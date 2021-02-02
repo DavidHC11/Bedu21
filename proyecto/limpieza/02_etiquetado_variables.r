@@ -10,10 +10,6 @@ etiquetar_variables <- function(df) {
         "host_is_superhost",
         "host_identity_verified",
         "neighbourhood",
-        "neighbourhood_cleansed",
-        "neighbourhood_group_cleansed",
-        "property_type",
-        "room_type",
         "accommodates",
         "calendar_updated",
         "has_availability",
@@ -69,7 +65,11 @@ etiquetar_variables <- function(df) {
         "host_verifications",
         "bathrooms_text",
         "name",
-        "amenities"
+        "amenities",
+        "neighbourhood_cleansed",
+        "neighbourhood_group_cleansed",
+        "property_type",
+        "room_type"
     )
 
 

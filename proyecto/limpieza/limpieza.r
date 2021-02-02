@@ -34,3 +34,4 @@ df <- conformidad_c(df)
 
 df <- conformidad_v(df)
 
+write.csv(df, "preprocessed.csv")
