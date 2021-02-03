@@ -40,7 +40,7 @@ etiquetar_variables <- function(df) {
         "availability_365",
         "number_of_reviews",
         "number_of_reviews_ltm",
-        "number_of_reviews_l30d",
+        # "number_of_reviews_l30d",
         "review_scores_rating",
         "review_scores_accuracy",
         "review_scores_cleanliness",
@@ -63,7 +63,7 @@ etiquetar_variables <- function(df) {
     textos <- c(
         "host_name",
         "host_verifications",
-        "bathrooms_text",
+        # "bathrooms_text",
         "name",
         "amenities",
         "neighbourhood_cleansed",

@@ -14,7 +14,7 @@ setwd("proyecto/analisis_exploratorio")
 
 setwd("..")
 
-df <- read.csv("preprocessed.csv", encoding = "UTF-8")
+df <- read.csv("preprocessed2019.csv", encoding = "UTF-8")
 
 df <- df[, grep("^(c|v)", colnames(df), ignore.case = TRUE)]
 
@@ -32,84 +32,47 @@ variables <- select(
     -c_minimum_nights_avg_ntm,
     -c_maximum_nights_avg_ntm,
     -c_number_of_reviews_ltm,
-    -c_number_of_reviews_l30d,
+    -v_neighbourhood,
+    -v_calendar_updated,
+    -v_has_availability,
     -c_calculated_host_listings_count
 )
 
-salida <- as.data.frame(select(
-    df,
-    v_host_is_superhost
-))
 
 train <- sample(nrow(variables), round(nrow(variables) / 2))
 
-best <- svm(v_host_is_superhost ~ .,
-    data = variables[train, ],
-    kernel = "radial",
-    cost = 100,
-    gamma = 1.51
+variables_train <- variables[train, ]
+
+modeloglm <- glm(v_host_identity_verified ~ ., data = variables_train, family = binomial)
+
+summary(modeloglm)
+
+step(modeloglm)
+
+modelo2 <- glm(
+    formula = v_host_identity_verified ~ c_host_total_listings_count +
+        c_latitude + c_longitude + v_accommodates + v_bathrooms + v_beds + c_minimum_nights + c_availability_30 +
+        c_number_of_reviews + v_instant_bookable, family = binomial,
+    data = variables_train
 )
 
-mc <- table(
-    true = variables[-train, "v_host_is_superhost"],
-    pred = predict(best,
-        newdata = variables[-train, ]
-    )
-)
 
-round(sum(diag(mc)) / sum(colSums(mc)), 5)
+variables_train$predicciones <- ifelse(modelo2$fitted.values < 0.5, 0, 1)
 
-rs <- apply(mc, 1, sum)
-r1 <- round(mc[1, ] / rs[1], 5)
-r2 <- round(mc[2, ] / rs[2], 5)
-rbind(No = r1, Yes = r2)
+prueba <- predict(modelo2, newdata = variables[-train, ], type = "response")
 
-fitted <- attributes(predict(best, variables[-train, ],
-    decision.values = TRUE
-))$decision.values
 
-efectividad <- c()
+for (i in seq(0, 1, 0.01)) {
+    prueba2 <- ifelse(prueba > i, 1, 0)
 
-thresholds <- seq(-2, 1, 0.1)
+    confusion <- table(prueba2, variables$v_host_identity_verified[-train])
 
-for (threshold in thresholds) {
-    eti <- ifelse(fitted < threshold, "Yes", "No")
-
-    mc <- table(
-        true = variables[-train, "v_host_is_superhost"],
-        pred = eti
-    )
-    mc
-
-    e <- round(sum(diag(mc)) / sum(colSums(mc)), 5)
-
-    efectividad <- c(efectividad, e)
+    efectividad <- round(sum(diag(confusion)) / sum(colSums(confusion)), 5)
+    if (efectividad > 0.6) {
+        print(sprintf("%f, %f", i, efectividad))
+    }
 }
 
-cbind(thresholds, efectividad)
-
-
-eti <- ifelse(fitted < -1.0, "Yes", "No")
-
-mc <- table(
-    true = variables[-train, "v_host_is_superhost"],
-    pred = eti
-)
-mc
-
-e <- round(sum(diag(mc)) / sum(colSums(mc)), 5)
-
-efectividad <- c(efectividad, e)
-
-
-rs <- apply(mc, 1, sum)
-r1 <- round(mc[1, ] / rs[1], 5)
-r2 <- round(mc[2, ] / rs[2], 5)
-rbind(No = r1, Yes = r2)
-
-
-
-analisis_exploratorio <- function(df) {
-    salida <- select(df, c_price)
-    corrplot(cor(variables))
-}
+variables_train$predicciones <- ifelse(modelo2$fitted.values < 0.52, 0, 1)
+prueba2 <- ifelse(prueba > 0.52, 1, 0)
+confusion <- table(prueba2, variables$v_host_identity_verified[-train])

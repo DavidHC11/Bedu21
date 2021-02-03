@@ -16,9 +16,10 @@ source("./05_conformidad_integridad.r")
 # ** Cambiar directorio de trabajo a ubicación de CSV.
 
 setwd("..")
-data <- read.csv("listings.csv", encoding = "UTF-8")
+data2019 <- read.csv("listings2019.csv", encoding = "UTF-8")
+data2020 <- read.csv("listings2020.csv", encoding = "UTF-8")
 
-df <- seleccionar_variables(data)
+df <- seleccionar_variables(data2019)
 
 df <- etiquetar_variables(df)
 
@@ -34,4 +35,4 @@ df <- conformidad_c(df)
 
 df <- conformidad_v(df)
 
-write.csv(df, "preprocessed.csv")
+write.csv(df, "preprocessed2019.csv")

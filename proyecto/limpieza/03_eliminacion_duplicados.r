@@ -13,7 +13,9 @@ eliminar_duplicados <- function(df) {
     indexid <- which(duplicados_sin_id == T)
 
     # Eliminamos las entradas duplicadas en el data frame con id
-    df <- df[-indexid, ]
+    if (length(indexid) > 0) {
+        df <- df[-indexid, ]
+    }
 
     # Filas duplicadas con d_last_scraped
     df$d_calendar_last_scraped <- NULL
