@@ -18,8 +18,8 @@ source("./05_conformidad_integridad.r")
 # ** Cambiar directorio de trabajo a ubicación de CSV.
 setwd("..")
 
-R.utils::gunzip("listings2019.csv", remove = FALSE)
-R.utils::gunzip("listings2020.csv", remove = FALSE)
+R.utils::gunzip("listings2019.csv.gz", remove = FALSE)
+R.utils::gunzip("listings2020.csv.gz", remove = FALSE)
 
 data2019 <- read.csv("listings2019.csv", encoding = "UTF-8")
 data2020 <- read.csv("listings2020.csv", encoding = "UTF-8")
