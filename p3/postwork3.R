@@ -3,7 +3,7 @@ library(ggplot2)
 
 # Se carga archivo del postwork previo
 #setwd("./Downloads/BEDU Postworks/3")
-all_matches <- read.csv("All-Matches.csv")
+all_matches <- read.csv("liga_17-20.csv")
 
 # Se crean las tablas de probabilidades
 home_prob <- (table(all_matches$FTHG)/dim(all_matches)[1]) * 100 
